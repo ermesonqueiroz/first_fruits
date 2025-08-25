@@ -42,7 +42,6 @@ class _RegisterIncomePageState extends State<RegisterIncomePage> {
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
-        backgroundColor: Colors.grey[300],
         appBar: AppBar(title: Text('Adicionar entrada')),
         body: SafeArea(
           child: Padding(

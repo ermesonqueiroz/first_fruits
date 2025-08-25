@@ -7,41 +7,39 @@ import 'package:flutter/services.dart';
 class PixPage extends StatefulWidget {
   final String title;
   final double value;
+  final Pix pix;
 
-  const PixPage({super.key, required this.title, required this.value});
+  const PixPage({
+    super.key,
+    required this.title,
+    required this.value,
+    required this.pix,
+  });
 
   @override
   State<PixPage> createState() => _PixPageState();
 }
 
 class _PixPageState extends State<PixPage> {
-  late Pix pix;
-
-  @override
-  void initState() {
-    super.initState();
-    pix = Pix(
-      key: '09606704327',
-      amount: widget.value,
-      merchantCity: 'FORTALEZA',
-      merchantName: 'Ermeson S Queiroz',
-      referenceLabel: '***',
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final formatter = NumberFormat.currency(locale: 'pt_BR', symbol: 'R\$');
 
     return Scaffold(
-      backgroundColor: Colors.grey[300],
-      appBar: AppBar(title: Text('QR Code')),
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.only(left: 40, right: 40, top: 25),
+          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 25),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              Align(
+                alignment: AlignmentGeometry.centerLeft,
+                child: GestureDetector(
+                  onTap: () => Navigator.pop(context),
+                  child: Icon(Icons.arrow_back_ios),
+                ),
+              ),
+              SizedBox(height: 10),
               Text(
                 widget.title,
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
@@ -51,12 +49,15 @@ class _PixPageState extends State<PixPage> {
                 style: TextStyle(fontSize: 20),
               ),
               SizedBox(height: 32),
-              QrImageView(data: pix.getPayload()),
+              QrImageView(
+                data: widget.pix.getPayload(),
+                foregroundColor: Color.fromARGB(255, 34, 34, 34),
+              ),
               SizedBox(height: 10),
               TextButton(
                 onPressed: () async {
                   await Clipboard.setData(
-                    ClipboardData(text: pix.getPayload()),
+                    ClipboardData(text: widget.pix.getPayload()),
                   );
 
                   if (!mounted) return;
@@ -69,7 +70,7 @@ class _PixPageState extends State<PixPage> {
                   );
                 },
                 style: TextButton.styleFrom(
-                  backgroundColor: Colors.black87,
+                  backgroundColor: Color.fromARGB(255, 34, 34, 34),
                   foregroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(4),
