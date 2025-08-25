@@ -90,7 +90,6 @@ class _SettingsPageState extends State<SettingsPage> {
                             SizedBox(height: 8),
                             TextFormField(
                               controller: _firstFruitsPIX,
-                              keyboardType: TextInputType.number,
                               decoration: InputDecoration(
                                 label: Text('Chave PIX'),
                                 prefixIcon: Icon(Icons.pix),
@@ -108,7 +107,6 @@ class _SettingsPageState extends State<SettingsPage> {
                             SizedBox(height: 8),
                             TextFormField(
                               controller: _tithePIX,
-                              keyboardType: TextInputType.number,
                               decoration: InputDecoration(
                                 label: Text('Chave PIX'),
                                 prefixIcon: Icon(Icons.pix),
