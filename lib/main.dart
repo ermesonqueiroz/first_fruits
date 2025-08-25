@@ -1,5 +1,6 @@
 import 'package:first_fruits/pages/home_page.dart';
 import 'package:first_fruits/pages/register_income_page.dart';
+import 'package:first_fruits/pages/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
@@ -15,17 +16,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Primeiros Frutos',
+      title: 'Primícias',
       theme: ThemeData(
         fontFamily: 'Poppins',
-        colorScheme: ColorScheme.fromSeed(
-          primary: Colors.black87,
-          seedColor: Colors.blue,
-        ),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
       ),
       initialRoute: '/',
       routes: {
         '/': (BuildContext context) => HomePage(),
+        '/settings': (BuildContext context) => SettingsPage(),
         '/register-income': (BuildContext context) => RegisterIncomePage(),
       },
     );
