@@ -29,6 +29,7 @@ class _RegisterIncomePageState extends State<RegisterIncomePage> {
       Income(
         value: parseCurrency(_valueController.text),
         description: _descriptionController.text,
+        createdAt: DateTime.now(),
       ),
     );
 

@@ -1,6 +1,26 @@
 import 'package:first_fruits/domain/income.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:sqflite_migration/sqflite_migration.dart';
+
+final initialScript = '''
+CREATE TABLE incomes (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  value REAL NOT NULL,
+  description TEXT NOT NULL
+);
+''';
+
+final migrations = [
+  '''
+  ALTER TABLE incomes
+  ADD COLUMN created_at TEXT;
+  ''',
+  '''
+  UPDATE incomes
+  SET created_at = strftime("%Y-%m-%d %H:%M:%S", "now", "localtime");
+  ''',
+];
 
 class DatabaseService {
   static final DatabaseService _databaseService = DatabaseService._internal();
@@ -14,22 +34,16 @@ class DatabaseService {
     return _database!;
   }
 
+  final _migrationConfig = MigrationConfig(
+    initializationScript: [initialScript],
+    migrationScripts: migrations,
+  );
+
   Future _initDatabase() async {
     final databasePath = await getDatabasesPath();
     final path = join(databasePath, 'flutter_sqflite_database.db');
 
-    return await openDatabase(
-      path,
-      onCreate: _onCreate,
-      version: 1,
-      onConfigure: (db) async => await db.execute('PRAGMA foreign_keys = ON'),
-    );
-  }
-
-  Future<void> _onCreate(Database db, int version) async {
-    await db.execute(
-      'CREATE TABLE incomes (id INTEGER PRIMARY KEY AUTOINCREMENT, value REAL NOT NULL, description TEXT NOT NULL);',
-    );
+    return await openDatabaseWithMigration(path, _migrationConfig);
   }
 
   Future<void> addIncome(Income income) async {
@@ -47,6 +61,7 @@ class DatabaseService {
       'incomes',
       orderBy: 'id DESC',
     );
+    print(Income.fromMap(incomes[incomes.length - 1]));
     return List.generate(
       incomes.length,
       (index) => Income.fromMap(incomes[index]),

@@ -69,28 +69,32 @@ class _HomePageState extends State<HomePage> {
                             ConnectionState.waiting) {
                           return Center(child: CircularProgressIndicator());
                         }
+                        print(snapshot.data);
                         return Column(
                           spacing: 10,
                           children: [
                             SizedBox(height: 2),
-                            ...snapshot.data!.map(
-                              (Income income) => GestureDetector(
-                                onTap: () => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        IncomeDetailsPage(income),
+                            ...snapshot.data?.map(
+                                  (Income income) => GestureDetector(
+                                    onTap: () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            IncomeDetailsPage(income),
+                                      ),
+                                    ),
+                                    child: CardWidget(
+                                      title: income.description,
+                                      description: currencyFormat.format(
+                                        income.value,
+                                      ),
+                                      bottom: income.createdAt != null
+                                          ? dateFormat.format(income.createdAt!)
+                                          : null,
+                                    ),
                                   ),
-                                ),
-                                child: CardWidget(
-                                  title: income.description,
-                                  description: currencyFormat.format(
-                                    income.value,
-                                  ),
-                                  bottom: dateFormat.format(DateTime.now()),
-                                ),
-                              ),
-                            ),
+                                ) ??
+                                [],
                             SizedBox(height: 30),
                           ],
                         );
